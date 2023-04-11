@@ -13,7 +13,7 @@ cap.set(3, 1280)
 cap.set(4, 720)
 
 # create the Model
-model = YOLO('../yolo-weights/yolov8n.pt')
+model = YOLO('../yolo-weights/yolov8l.pt')
 
 classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
               "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
@@ -44,20 +44,23 @@ while True:
             # creating the rectangle using cv2 library'
             # cv2.rectangle(img,(x1,y1),(x2,y2),(255,0,255),3)
 
-            # to use this fancy bounding box from cvzone library, you have to change the variable and its values
+            # to use this fancy bounding box from CVZONE library, you have to change the variable and its values
             x1, y1, x2, y2 = box.xyxy[0]
             x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-            w, h = x2-x1, y2-y1
-            cvzone.cornerRect(img, (x1, y1, w, h))
+            w, h = x2 - x1, y2 - y1
 
             # Confidence
-            conf = math.ceil((box.conf[0])*100)/100
-            print(conf)
+            conf = math.ceil((box.conf[0] * 100)) / 100
+
             # Class names
             cls = int(box.cls[0])
-            print(cls)
+            currentClass = classNames[cls]
             # text on top of the rectangle
-            cvzone.putTextRect(img, f' {classNames[cls]} Conf={conf}', (max(0, x1), max(35, y1)))
+
+            # draw bounding box and label for the object
+            cvzone.putTextRect(img, f'{currentClass} {conf}', (max(0, x1), max(35, y1)),
+                               scale=0.9, thickness=2, offset=3)
+            cvzone.cornerRect(img, (x1, y1, w, h), l=9)
 
     cv2.imshow("image", img)
     # delay time of the video capture
