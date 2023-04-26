@@ -1,3 +1,5 @@
+from typing import List, Tuple, Any
+
 from ultralytics import YOLO
 import cv2
 import math
@@ -63,7 +65,7 @@ while True:
             cls = int(box.cls[0])
             currentClass = classNames[cls]
 
-            if currentClass in ["car", "truck", "bus"]:
+            if currentClass in ["car", "truck", "bus", "motorbike"]:
                 centroid = (int((x1 + x2) / 2), int((y1 + y2) / 2))
                 current_centroids[centroid] = currentClass
 
@@ -78,7 +80,7 @@ while True:
         elif new_key[0] > prev_centroid_x:
             direction = "outgoing"
 
-        tracked_centroids[new_key] = tracked_centroids.get(old_key, {"centroid": new_key, "class": current_centroids[new_key], "direction": ""})
+        tracked_centroids[new_key] = tracked_centroids.get(old_key, {"centroid": new_key, "class": current_centroids [new_key], "direction": ""})
         tracked_centroids[new_key]["centroid"] = new_key
         tracked_centroids[new_key]["direction"] = direction
         del tracked_centroids[old_key]
